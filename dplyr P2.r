@@ -1,0 +1,21 @@
+library(dplyr)
+library(hflights)
+print(select(hflights, ActualElapsedTime, AirTime, ArrDelay, DepDelay))
+print(select(hflights, Origin:Cancelled))
+print(select(hflights, Year:DayOfWeek, ArrDelay:Diverted))
+print(select(hflights, contains('Delay')))
+print(select(hflights, UniqueCarrier, ends_with('Num'), starts_with('Cancel')))
+print(select(hflights, ends_with('Time'), ends_with('Delay')))
+ex1r <- hflights[c("TaxiIn", "TaxiOut", "Distance")]
+ex1d <- select(hflights, starts_with('Taxi'), Distance)
+ex2r <- hflights[c("Year", "Month", "DayOfWeek", "DepTime", "ArrTime")]
+ex2d <- select(hflights, Year:ArrTime, -DayofMonth)
+ex3r <- hflights[c("TailNum", "TaxiIn", "TaxiOut")]
+ex3d <- select(hflights, starts_with('Ta'))
+g1 <- mutate(hflights, ActualGroundTime = ActualElapsedTime - AirTime)
+g2 <- mutate(g1, GroundTime = TaxiIn + TaxiOut)
+g3 <- mutate(g2, AverageSpeed = (60 * Distance) / AirTime)
+head(g3)
+m1 <- mutate(hflights, loss = ArrDelay - DepDelay, loss_ratio = loss / DepDelay)
+m2 <- mutate(hflights, TotalTaxi = TaxiIn + TaxiOut, ActualGroundTime = ActualElapsedTime - AirTime, Diff = TotalTaxi - ActualGroundTime)
+head(m2)
